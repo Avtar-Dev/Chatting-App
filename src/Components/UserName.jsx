@@ -60,7 +60,7 @@ const UserName = () => {
         <div>
           <b>{userName}</b>
         </div>
-        <p className="text-sm">{status ? "online" : "offline"}</p>
+        <p className="text-sm">{status ? "Online" : "Offline"}</p>
       </div>
     </div>
   );

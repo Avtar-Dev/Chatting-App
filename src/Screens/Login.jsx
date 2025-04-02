@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import "../App.css";
 import { useFirebase } from "../../Context/FirebaseContext";
 import { Navigate, useNavigate } from "react-router-dom";
+import { ChatContext } from "../../Context/ChatContext";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -9,9 +10,13 @@ const Login = () => {
   const [err, setErr] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
+  const { handleOffline } = useContext(ChatContext);
   const navigate = useNavigate();
   const loginFirebaseHere = useFirebase();
 
+  // useEffect(() => {
+  //   handleOffline();
+  // }, []);
   const submitHandle = async (e) => {
     e.preventDefault();
     const email = e.target[0].value;

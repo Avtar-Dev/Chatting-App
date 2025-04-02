@@ -25,19 +25,10 @@ const ChatList = () => {
 
   const { currentUser, setCurrentUser } = useContext(AuthContext);
   const { dispatch } = useContext(ChatContext);
+  const { updateIsOnlineField, handleOffline } = useContext(ChatContext);
   const navigate = useNavigate();
-  console.log("chats", chats);
+  console.log("currentUser", currentUser.uid);
 
-  const updateIsOnlineField = async () => {
-    const docRef = doc(db, "users", currentUser.uid);
-
-    await updateDoc(docRef, { online: true });
-  };
-
-  const handleOffline = async () => {
-    const docRef = doc(db, "users", currentUser.uid);
-    await updateDoc(docRef, { online: false });
-  };
   useEffect(() => {
     updateIsOnlineField();
   }, []);
@@ -127,9 +118,9 @@ const ChatList = () => {
         <button
           className="px-2 py-1 bg-red-500 text-white rounded-md hover:bg-red-600"
           onClick={() => {
-            signOut(firebaseAuth);
             setCurrentUser({});
             handleOffline();
+            signOut(firebaseAuth);
           }}>
           Logout
         </button>

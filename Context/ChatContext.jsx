@@ -1,11 +1,22 @@
 import { createContext, useContext, useReducer } from "react";
 import { AuthContext } from "./AuthContext";
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from "./FirebaseContext";
 
 export const ChatContext = createContext();
 
 export const ChatContextProvider = ({ children }) => {
   const { currentUser } = useContext(AuthContext);
 
+  const updateIsOnlineField = async () => {
+    const docRef = doc(db, "users", currentUser.uid);
+    await updateDoc(docRef, { online: true });
+  };
+
+  const handleOffline = async () => {
+    const docRef = doc(db, "users", currentUser.uid);
+    await updateDoc(docRef, { online: false });
+  };
   const INITIAL_STATE = {
     chatId: "null",
     user: {},
@@ -31,7 +42,8 @@ export const ChatContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(chatReducer, INITIAL_STATE);
 
   return (
-    <ChatContext.Provider value={{ data: state, dispatch }}>
+    <ChatContext.Provider
+      value={{ data: state, dispatch, updateIsOnlineField, handleOffline }}>
       {children}
     </ChatContext.Provider>
   );

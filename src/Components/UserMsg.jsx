@@ -31,13 +31,15 @@ const UserMsg = ({ message }) => {
             ref={ref}
             className="mr-auto mb-3"
             style={{ maxWidth: "-webkit-fill-available" }}>
-            <div
-              className={`w-max ${
-                message.text ? "border border-[#dba2a2]" : "" // 🔹 Only apply border if text exists
-              } p-4 rounded-xl  ml-1 break-words mr-1`}
-              style={{ maxWidth: "-webkit-fill-available" }}>
-              {message.text}
-            </div>
+            {message.text == "" ? null : (
+              <div
+                className={`w-max ${
+                  message.text ? "border border-[#dba2a2]" : "" // 🔹 Only apply border if text exists
+                } p-4 rounded-xl  ml-1 break-words mr-1`}
+                style={{ maxWidth: "-webkit-fill-available" }}>
+                {message.text}
+              </div>
+            )}
             {message.img && (
               <div className="ml-2">
                 <img

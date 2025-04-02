@@ -27,10 +27,22 @@ const ChatList = () => {
   const { dispatch } = useContext(ChatContext);
   const { updateIsOnlineField, handleOffline } = useContext(ChatContext);
   const navigate = useNavigate();
-  console.log("currentUser", currentUser.uid);
+  console.log("pathname", window.location.pathname);
 
   useEffect(() => {
     updateIsOnlineField();
+
+    const handleBackButton = (event) => {
+      event.preventDefault();
+      window.history.pushState(null, "", window.location.pathname);
+    };
+
+    window.history.pushState(null, "", window.location.pathname);
+    window.addEventListener("popstate", handleBackButton);
+
+    return () => {
+      window.removeEventListener("popstate", handleBackButton);
+    };
   }, []);
 
   // Fetch chats for the current user

@@ -20,6 +20,7 @@ const MyMsg = ({ message }) => {
   useEffect(() => {
     ref.current?.scrollIntoView({ behavior: "smooth" });
   }, [message]);
+  console.log("message", message.text);
 
   return (
     <>
@@ -28,13 +29,15 @@ const MyMsg = ({ message }) => {
           ref={ref}
           className="ml-auto mb-3 "
           style={{ maxWidth: "-webkit-fill-available" }}>
-          <div
-            className={`w-max p-4 rounded-xl ml-1 break-words mr-1 ${
-              message.text ? "border border-[#dba2a2]" : "" // 🔹 Only apply border if text exists
-            }`}
-            style={{ maxWidth: "-webkit-fill-available" }}>
-            {message.text}
-          </div>
+          {message.text == "" ? null : (
+            <div
+              className={`w-max p-4 rounded-xl ml-1 break-words mr-1 ${
+                message.text ? "border border-[#dba2a2]" : "" // 🔹 Only apply border if text exists
+              }`}
+              style={{ maxWidth: "-webkit-fill-available" }}>
+              {message?.text}
+            </div>
+          )}
           {message.img && (
             <div className="mr-2">
               <img

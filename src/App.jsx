@@ -64,7 +64,6 @@ import { FirebaseProvider } from "../Context/FirebaseContext";
 import { isEmptyObject } from "./utils/EmpObj";
 import { useContext } from "react";
 import { AuthContext } from "../Context/AuthContext";
-// import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   const ProtectedRoute = ({ children }) => {

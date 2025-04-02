@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import ChatRow from "../Components/ChatRow";
 import Search from "../Components/Search";
 import ChatSearch from "../Components/ChatSearch";
@@ -22,12 +22,13 @@ const ChatList = () => {
   const [err, setErr] = useState(false);
   const [chats, setChats] = useState({});
   const [UserName, setUserName] = useState("");
-  const [backPressCount, setBackPressCount] = useState(0);
+  // const [backPressCount, setBackPressCount] = useState(0);
 
   const { currentUser, setCurrentUser } = useContext(AuthContext);
   const { dispatch } = useContext(ChatContext);
   const { updateIsOnlineField, handleOffline } = useContext(ChatContext);
   const navigate = useNavigate();
+  const backPressCount = useRef(0);
   console.log("pathname", window.location.pathname);
 
   // useEffect(() => {
@@ -54,13 +55,13 @@ const ChatList = () => {
     const handleBackButton = (event) => {
       event.preventDefault();
 
-      if (backPressCount === 1) {
+      if (backPressCount.current === 1) {
         console.log("Double-tap detected! Running function...");
-        handleOffline(); // Call your function
+        handleOffline(); // Call function properly
         window.history.back(); // Allow back navigation
       } else {
-        setBackPressCount(1);
-        setTimeout(() => setBackPressCount(0), 1000); // Reset count after 1 second
+        backPressCount.current = 1;
+        setTimeout(() => (backPressCount.current = 0), 1000); // Reset after 1 second
       }
 
       window.history.pushState(null, "", window.location.pathname);

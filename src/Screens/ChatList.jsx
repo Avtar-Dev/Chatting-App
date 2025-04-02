@@ -39,7 +39,7 @@ const ChatList = () => {
 
     window.history.pushState(null, "", window.location.pathname);
     window.addEventListener("popstate", handleBackButton);
-
+    handleOffline();
     return () => {
       window.removeEventListener("popstate", handleBackButton);
     };
@@ -133,7 +133,8 @@ const ChatList = () => {
             setCurrentUser({});
             handleOffline();
             signOut(firebaseAuth);
-          }}>
+          }}
+        >
           Logout
         </button>
       </div>

@@ -14,9 +14,6 @@ const Login = () => {
   const navigate = useNavigate();
   const loginFirebaseHere = useFirebase();
 
-  // useEffect(() => {
-  //   handleOffline();
-  // }, []);
   const submitHandle = async (e) => {
     e.preventDefault();
     const email = e.target[0].value;

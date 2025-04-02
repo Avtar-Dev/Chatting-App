@@ -22,6 +22,7 @@ const ChatList = () => {
   const [err, setErr] = useState(false);
   const [chats, setChats] = useState({});
   const [UserName, setUserName] = useState("");
+  const [backPressCount, setBackPressCount] = useState(0);
 
   const { currentUser, setCurrentUser } = useContext(AuthContext);
   const { dispatch } = useContext(ChatContext);
@@ -29,21 +30,49 @@ const ChatList = () => {
   const navigate = useNavigate();
   console.log("pathname", window.location.pathname);
 
+  // useEffect(() => {
+  //   updateIsOnlineField();
+
+  //   const handleBackButton = (event) => {
+  //     event.preventDefault();
+  //     window.history.pushState(null, "", window.location.pathname);
+  //   };
+
+  //   window.history.pushState(null, "", window.location.pathname);
+  //   window.addEventListener("popstate", handleBackButton);
+
+  //   return () => {
+  //     window.removeEventListener("popstate", handleBackButton);
+  //   };
+  // }, []);
+
   useEffect(() => {
     updateIsOnlineField();
+  }, []);
 
+  useEffect(() => {
     const handleBackButton = (event) => {
       event.preventDefault();
+
+      if (backPressCount === 1) {
+        console.log("Double-tap detected! Running function...");
+        handleOffline(); // Call your function
+        window.history.back(); // Allow back navigation
+      } else {
+        setBackPressCount(1);
+        setTimeout(() => setBackPressCount(0), 1000); // Reset count after 1 second
+      }
+
       window.history.pushState(null, "", window.location.pathname);
     };
 
     window.history.pushState(null, "", window.location.pathname);
     window.addEventListener("popstate", handleBackButton);
-    handleOffline();
+
     return () => {
       window.removeEventListener("popstate", handleBackButton);
     };
-  }, []);
+  }, [backPressCount]);
 
   // Fetch chats for the current user
   useEffect(() => {

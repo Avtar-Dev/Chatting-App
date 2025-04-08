@@ -46,11 +46,11 @@ const SendMsg = () => {
         },
         async () => {
           const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-          await sendMessage(downloadURL); // Send message with the image URL
+          await sendMessage(downloadURL);
         }
       );
     } else {
-      await sendMessage(); // Send text-only message
+      await sendMessage();
     }
 
     setText("");
@@ -61,7 +61,7 @@ const SendMsg = () => {
   const sendMessage = async (imgURL = null) => {
     if (!chatData || !chatData.chatId) {
       console.error("Chat ID is missing.");
-      return; // Exit early if chatId is undefined
+      return;
     }
 
     const newMessage = {
@@ -73,12 +73,10 @@ const SendMsg = () => {
     };
 
     try {
-      // Update the chat document with the new message
       await updateDoc(doc(db, "chats", chatData.chatId), {
         messages: arrayUnion(newMessage),
       });
 
-      // Update the user chats metadata for both users
       await updateDoc(doc(db, "userChats", currentUser.uid), {
         [`${chatData.chatId}.lastMessage`]: { text },
         [`${chatData.chatId}.date`]: serverTimestamp(),

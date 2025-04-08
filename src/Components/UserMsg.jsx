@@ -5,7 +5,7 @@ const UserMsg = ({ message }) => {
   const { data } = useContext(ChatContext);
   const ref = useRef();
 
-  const isUserMessage = message.senderId !== data.currentUserId; // Example fix
+  const isUserMessage = message.senderId !== data.currentUserId;
 
   const formatDate = (timestamp) => {
     if (!timestamp) return "";
@@ -14,7 +14,7 @@ const UserMsg = ({ message }) => {
     const hours = date.getHours();
     const minutes = date.getMinutes();
     const ampm = hours >= 12 ? "PM" : "AM";
-    const formattedHours = hours % 12 || 12; // Convert 0 to 12 for 12-hour format
+    const formattedHours = hours % 12 || 12;
     const formattedMinutes = minutes.toString().padStart(2, "0");
     return `${formattedHours}:${formattedMinutes} ${ampm}`;
   };
@@ -34,7 +34,7 @@ const UserMsg = ({ message }) => {
             {message.text == "" ? null : (
               <div
                 className={`w-max ${
-                  message.text ? "border border-[#dba2a2]" : "" // 🔹 Only apply border if text exists
+                  message.text ? "border border-[#dba2a2]" : ""
                 } p-4 rounded-xl  ml-1 break-words mr-1`}
                 style={{ maxWidth: "-webkit-fill-available" }}>
                 {message.text}

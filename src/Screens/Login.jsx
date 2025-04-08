@@ -10,7 +10,6 @@ const Login = () => {
   const [err, setErr] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  const { handleOffline } = useContext(ChatContext);
   const navigate = useNavigate();
   const loginFirebaseHere = useFirebase();
 
@@ -110,12 +109,6 @@ const Login = () => {
           SignUp
         </p>
       </div>
-
-      {/* <button
-        className="google-signin-button"
-        onClick={loginFirebaseHere.signinWithGoogle}>
-        Sign in with Google
-      </button> */}
     </div>
   );
 };

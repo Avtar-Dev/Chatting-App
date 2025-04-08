@@ -1,37 +1,5 @@
 @import "tailwindcss";
 
-/* html{
-  background-color: #fef3c7;
-} */
-/* .dark-theme {
-  --main--bg: black;
-  --text--clr: white;
-  --button--bg: black;
-  --button--clr: white;
-  --border: 2px solid white;
-} */
-
-/* .light-theme {
-  --main--bg: white;
-  --text--clr: black;
-  --button--bg: white;
-  --button--clr: black;
-  --border: 2px solid black;
-} */
-
-/* * {
-  background: var(--main--bg);
-} */
-
-/* .read {
-  color: var(--text--clr);
-}
-.btn {
-  background-color: var(--button--bg);
-  color: var(--button--clr);
-  border: var(--border);
-} */
-
 ::-webkit-scrollbar {
   display: none;
 }
@@ -81,3 +49,35 @@
 .google-signin-button:hover {
   background-color: #c23321;
 }
+
+/* html{
+  background-color: #fef3c7;
+} */
+/* .dark-theme {
+  --main--bg: black;
+  --text--clr: white;
+  --button--bg: black;
+  --button--clr: white;
+  --border: 2px solid white;
+} */
+
+/* .light-theme {
+  --main--bg: white;
+  --text--clr: black;
+  --button--bg: white;
+  --button--clr: black;
+  --border: 2px solid black;
+} */
+
+/* * {
+  background: var(--main--bg);
+} */
+
+/* .read {
+  color: var(--text--clr);
+}
+.btn {
+  background-color: var(--button--bg);
+  color: var(--button--clr);
+  border: var(--border);
+} */

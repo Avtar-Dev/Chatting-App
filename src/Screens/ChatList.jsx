@@ -5,7 +5,6 @@ import ChatSearch from "../Components/ChatSearch";
 import { signOut } from "firebase/auth";
 import { db, firebaseAuth } from "../../Context/FirebaseContext";
 import { AuthContext } from "../../Context/AuthContext";
-
 import {
   doc,
   onSnapshot,
@@ -22,30 +21,15 @@ const ChatList = () => {
   const [err, setErr] = useState(false);
   const [chats, setChats] = useState({});
   const [UserName, setUserName] = useState("");
-  // const [backPressCount, setBackPressCount] = useState(0);
 
   const { currentUser, setCurrentUser } = useContext(AuthContext);
   const { dispatch } = useContext(ChatContext);
+
   const { updateIsOnlineField, handleOffline } = useContext(ChatContext);
+  console.log("photo", currentUser?.photoURL);
+
   const navigate = useNavigate();
   const backPressCount = useRef(0);
-  console.log("pathname", window.location.pathname);
-
-  // useEffect(() => {
-  //   updateIsOnlineField();
-
-  //   const handleBackButton = (event) => {
-  //     event.preventDefault();
-  //     window.history.pushState(null, "", window.location.pathname);
-  //   };
-
-  //   window.history.pushState(null, "", window.location.pathname);
-  //   window.addEventListener("popstate", handleBackButton);
-
-  //   return () => {
-  //     window.removeEventListener("popstate", handleBackButton);
-  //   };
-  // }, []);
 
   useEffect(() => {
     updateIsOnlineField();
@@ -57,11 +41,11 @@ const ChatList = () => {
 
       if (backPressCount.current === 1) {
         console.log("Double-tap detected! Running function...");
-        handleOffline(); // Call function properly
-        window.history.back(); // Allow back navigation
+        handleOffline();
+        window.history.back();
       } else {
         backPressCount.current = 1;
-        setTimeout(() => (backPressCount.current = 0), 1000); // Reset after 1 second
+        setTimeout(() => (backPressCount.current = 0), 1000);
       }
 
       window.history.pushState(null, "", window.location.pathname);
@@ -75,7 +59,6 @@ const ChatList = () => {
     };
   }, [backPressCount]);
 
-  // Fetch chats for the current user
   useEffect(() => {
     if (!currentUser?.uid) return;
 
@@ -86,7 +69,6 @@ const ChatList = () => {
     return () => unsub();
   }, [currentUser?.uid]);
 
-  // Select a chat or create a new one
   const handleSelect = async (selectedUser) => {
     if (!selectedUser?.uid) return;
 
@@ -100,10 +82,8 @@ const ChatList = () => {
       const chatExists = await getDoc(chatDoc);
 
       if (!chatExists.exists()) {
-        // Create a new chat
         await setDoc(chatDoc, { messages: [] });
 
-        // Update both users' chat lists
         await updateDoc(doc(db, "userChats", currentUser.uid), {
           [`${combinedId}.userInfo`]: {
             uid: selectedUser.uid,
@@ -148,7 +128,11 @@ const ChatList = () => {
       <div className="flex justify-between items-center p-2">
         <div className="flex items-center gap-1">
           <img
-            src={currentUser?.photoURL || "https://via.placeholder.com/40"}
+            src={
+              currentUser?.photoURL == null
+                ? "not-upload.png"
+                : currentUser?.photoURL
+            }
             alt="Profile"
             className="w-10 h-10 rounded-full"
           />
@@ -163,8 +147,7 @@ const ChatList = () => {
             setCurrentUser({});
             handleOffline();
             signOut(firebaseAuth);
-          }}
-        >
+          }}>
           Logout
         </button>
       </div>
@@ -200,10 +183,11 @@ const ChatList = () => {
           ?.sort((a, b) => b[1].date - a[1].date)
           .map(([chatId, chat]) => {
             const userInfo = chat?.userInfo || {};
+
             return (
               <div key={chatId} onClick={() => handleSelectChat(userInfo)}>
                 <ChatRow
-                  dp={userInfo.photoURL || "https://via.placeholder.com/40"}
+                  dp={userInfo.photoURL}
                   name={userInfo.displayName || "Unknown User"}
                   msg={chat.lastMessage?.text || ""}
                   chat={chat}

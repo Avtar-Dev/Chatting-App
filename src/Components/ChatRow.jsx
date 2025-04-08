@@ -22,6 +22,7 @@ const ChatRow = ({ dp, name, msg, chat, userMsg }) => {
     }
   }, [msg]);
 
+  const notUpload = "not-upload.png";
   const message = userMsg ? userMsg : msg;
   const maxLength = 25;
   const textLength =
@@ -32,7 +33,11 @@ const ChatRow = ({ dp, name, msg, chat, userMsg }) => {
   return (
     <div className="w-auto bg-amber-100">
       <div className=" w-auto h-[11vh] flex items-center border-b-[0.1px] border-[rgb(214,230,255)] cursor-pointer ml-4 mr-4">
-        <img src={dp} alt="" className="w-13 h-13 rounded-full object-cover " />
+        <img
+          src={dp == "" ? notUpload : dp}
+          alt=""
+          className="w-13 h-13 rounded-full object-cover "
+        />
 
         <div className="ml-2">
           <div className="">

@@ -6,6 +6,7 @@ export const AuthContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState({});
+  const [fileName, setFileName] = useState("");
 
   useEffect(() => {
     const unsub = onAuthStateChanged(firebaseAuth, (user) => {
@@ -18,7 +19,9 @@ export const AuthContextProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ currentUser, setCurrentUser }}>
+    <AuthContext.Provider
+      value={{ currentUser, setCurrentUser, fileName, setFileName }}
+    >
       {children}
     </AuthContext.Provider>
   );

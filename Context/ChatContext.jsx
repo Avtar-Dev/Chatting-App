@@ -1,4 +1,4 @@
-import { createContext, useContext, useReducer } from "react";
+import { createContext, useContext, useReducer, useState } from "react";
 import { AuthContext } from "./AuthContext";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "./FirebaseContext";
@@ -6,6 +6,7 @@ import { db } from "./FirebaseContext";
 export const ChatContext = createContext();
 
 export const ChatContextProvider = ({ children }) => {
+  const [status, setStatus] = useState(false);
   const { currentUser } = useContext(AuthContext);
 
   const updateIsOnlineField = async () => {
@@ -43,7 +44,14 @@ export const ChatContextProvider = ({ children }) => {
 
   return (
     <ChatContext.Provider
-      value={{ data: state, dispatch, updateIsOnlineField, handleOffline }}>
+      value={{
+        data: state,
+        dispatch,
+        updateIsOnlineField,
+        handleOffline,
+        status,
+        setStatus,
+      }}>
       {children}
     </ChatContext.Provider>
   );

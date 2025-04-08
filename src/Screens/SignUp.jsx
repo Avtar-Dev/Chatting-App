@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import "../App.css";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { useFirebase, storage, db } from "../../Context/FirebaseContext";
 import { doc, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { updateProfile } from "firebase/auth";
+import { AuthContext } from "../../Context/AuthContext";
 
 const SignUp = () => {
   const [email, setEmail] = useState("");
@@ -12,7 +13,7 @@ const SignUp = () => {
   const [name, setName] = useState("");
   const [err, setErr] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [fileName, setFileName] = useState("");
+  const { fileName, setFileName } = useContext(AuthContext);
 
   const firebaseHere = useFirebase();
   const navigate = useNavigate();
@@ -33,38 +34,34 @@ const SignUp = () => {
     try {
       const result = await firebaseHere.signUpwithEandP(email, password);
       console.log("result", result);
-      alert("Signin Successfull", result);
+      alert("Signin Successfull");
       navigate("/login");
 
-      //Create a unique image name
-      const date = new Date().getTime();
-      const storageRef = ref(storage, `${displayName + date}`);
+      let photoURL = "";
+      if (file) {
+        const date = new Date().getTime();
+        const storageRef = ref(storage, `${displayName + date}`);
 
-      await uploadBytesResumable(storageRef, file).then(() => {
-        getDownloadURL(storageRef).then(async (downloadURL) => {
-          try {
-            //Update profile
-            await updateProfile(result.user, {
-              displayName,
-              photoURL: downloadURL,
-            });
-            //create user on firestore
-            await setDoc(doc(db, "users", result.user.uid), {
-              uid: result.user.uid,
-              displayName,
-              email,
-              photoURL: downloadURL,
-              online,
-            });
+        await uploadBytesResumable(storageRef, file);
+        photoURL = await getDownloadURL(storageRef);
+      }
 
-            await setDoc(doc(db, "userChats", result.user.uid), {});
-          } catch (err) {
-            console.log(err);
-            setErr(true);
-          }
-        });
+      await updateProfile(result.user, {
+        displayName,
+        ...(photoURL && { photoURL }),
       });
+
+      await setDoc(doc(db, "users", result.user.uid), {
+        uid: result.user.uid,
+        displayName,
+        email,
+        photoURL: photoURL || "",
+        online,
+      });
+
+      await setDoc(doc(db, "userChats", result.user.uid), {});
     } catch (err) {
+      console.error(err);
       setErr(true);
     }
   };
@@ -72,7 +69,7 @@ const SignUp = () => {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setFileName(file.name); // Update state with the file name
+      setFileName(file.name);
     }
   };
   return (

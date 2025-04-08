@@ -1,14 +1,14 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ChatContext } from "../../Context/ChatContext";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../Context/FirebaseContext";
 
 const UserName = () => {
-  const [status, setStatus] = useState(false);
   const navigate = useNavigate();
-  const { data } = useContext(ChatContext);
+  const { data, status, setStatus } = useContext(ChatContext);
 
+  const notUpload = "not-upload.png";
   useEffect(() => {
     const fetchData = async () => {
       if (!data?.user?.uid) return;
@@ -27,8 +27,9 @@ const UserName = () => {
     fetchData();
   }, [data?.user?.uid]);
 
-  const userPhoto = data.user?.photoURL || "https://via.placeholder.com/40";
+  const userPhoto = data.user?.photoURL;
   const userName = data.user?.displayName || "No user selected";
+  console.log("userPhoto", userPhoto);
 
   return (
     <div className="bg-cyan-500 h-[8vh] flex items-center border-b-[0.1px] border-cyan-500 sticky w-full top-0">
@@ -51,7 +52,7 @@ const UserName = () => {
       </span>
 
       <img
-        src={userPhoto}
+        src={userPhoto == "" ? notUpload : userPhoto}
         alt="User Profile"
         className="w-10 h-10 rounded-full ml-4"
       />
@@ -60,7 +61,7 @@ const UserName = () => {
         <div>
           <b>{userName}</b>
         </div>
-        <p className="text-sm">{status ? "Online" : "Offline"}</p>
+        <p className="text-sm">{status ? "online" : "offline"}</p>
       </div>
     </div>
   );
